@@ -1,9 +1,10 @@
+
 from learningequality/kalite:base
 
 MAINTAINER Aron Asor aron@learningequality.org
 
-# this commit is for 0.11.1
-RUN cd ka-lite; git checkout aa588
+# this commit is for 0.10.0
+RUN cd ka-lite; git checkout d3751
 
 # expose port 8000 if we ever desire to connect to it
 expose 8000
