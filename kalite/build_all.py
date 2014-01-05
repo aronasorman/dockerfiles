@@ -1,6 +1,7 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 import fnmatch
+import optparse
 import os
 import subprocess
 
@@ -20,13 +21,28 @@ def build_tag(name):
     else:
         tag = name
 
-    return '-t="%s"' % ':'.join([reponame, tag])
+    return '-t={}'.format(':'.join([reponame, tag]))
 
 
 if __name__ == '__main__':
-    command = ['sudo', 'docker', 'build']
+    # get cmdline arguments
+    optparser = optparse.OptionParser()
+    optparser.add_option('-v', '--verbose',
+                         dest='verbose',
+                         action='store_true',
+                         default=False,
+                         help='show docker build output to stdout.')
+    options, _ = optparser.parse_args()
+
+    command = ['sudo', 'docker', 'build', '-rm=true']
     for dir in dockerfile_dirs():
         basename = os.path.basename(dir)
         realcommand = command + [build_tag(basename), dir]
-        print ' '.join(realcommand)
-        subprocess.call(realcommand, stdout=subprocess.PIPE)
+        print(' '.join(realcommand))
+
+        if options.verbose:
+            stdout=None
+        else:
+            stdout=subprocess.DEVNULL
+
+        subprocess.call(realcommand, stdout=stdout)
