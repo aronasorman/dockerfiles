@@ -1,0 +1,2 @@
+DEBUG = True
+CENTRAL_SERVER = True
