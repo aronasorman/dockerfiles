@@ -1,4 +1,4 @@
-FROM learningequality/kalite:dev
+FROM kalite:dev
 
 MAINTAINER Aron Fyodor Asor aron@learningequality.org
 

@@ -1,5 +1,5 @@
 
-from learningequality/kalite:base
+FROM kalite:base
 
 MAINTAINER Aron Asor aron@learningequality.org
 

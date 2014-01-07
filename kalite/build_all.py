@@ -14,7 +14,7 @@ def dockerfile_dirs(dir=None):
             yield path
 
 def build_tag(name):
-    reponame = 'learningequality/kalite'
+    reponame = 'kalite'
 
     if name in ['base', '.', 'kalite']:
         tag = "base"
