@@ -23,6 +23,18 @@ def build_tag(name):
 
     return '-t={}'.format(':'.join([reponame, tag]))
 
+def build_dir(dir):
+    command = ['docker', 'build', '-rm=true']
+    basename = os.path.basename(dir)
+    realcommand = command + [build_tag(basename), dir]
+    print(' '.join(realcommand))
+
+    if options.verbose:
+        stdout=None
+    else:
+        stdout=subprocess.DEVNULL
+
+    subprocess.call(realcommand, stdout=stdout)
 
 if __name__ == '__main__':
     # get cmdline arguments
@@ -32,17 +44,17 @@ if __name__ == '__main__':
                          action='store_true',
                          default=False,
                          help='show docker build output to stdout.')
-    options, _ = optparser.parse_args()
+    options, args = optparser.parse_args()
 
-    command = ['sudo', 'docker', 'build', '-rm=true']
-    for dir in dockerfile_dirs():
-        basename = os.path.basename(dir)
-        realcommand = command + [build_tag(basename), dir]
-        print(' '.join(realcommand))
+    dirs_to_build = dockerfile_dirs()
 
-        if options.verbose:
-            stdout=None
-        else:
-            stdout=subprocess.DEVNULL
-
-        subprocess.call(realcommand, stdout=stdout)
+    # if args are given, build only those directories given in args
+    if args:
+        dirlist = list(dirs_to_build)
+        for dir in args:
+            fulldir = os.path.join(os.path.dirname(os.path.abspath(__file__)), dir)
+            if fulldir in dirlist:
+                build_dir(dir)
+    else:                       # build all directories we have here
+        for dir in dockerfile_dirs():
+            build_dir(dir)
